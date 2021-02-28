@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nuxt-web
+  namespace: default
+spec:
+  replicas: 1           #pod 數量
+  selector:             #管理pod的範圍
+    matchLabels:
+      app: nuxt-web
+  strategy:             #策略 指定新pod 替換舊pod, {Recreate || RollingUpdate : default }
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1        #升級過程中額外增加的pod數量
+      maxUnavailable: 1  #最多可以幾個pod不可用狀態
+  minReadySeconds: 30    #等愛秒數後再升級
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      labels:
+        app: nuxt-web
+    spec:
+      containers:
+        - name: nuxt-web
+          image: nuxt-web:<BUILD_TAG>
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 3000

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nuxt-web    # service name
+  namespace: default
+  labels:
+    app: nuxt-web
+spec:
+  ports:
+    - port: 3000         # cluster 對內 IP
+      targetPort: 3000
+  selector:
+    app: nuxt-web
